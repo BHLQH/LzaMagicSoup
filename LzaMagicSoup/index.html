@@ -10,7 +10,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #b0c4de;
+            background-color: #263e4d;
         }
 
 
@@ -97,6 +97,8 @@
                 transform: translateY(10px) rotate(1deg); /* 上下摇晃的范围 */
             }
         }
+
+
     </style>
 </head>
 <body>
@@ -118,8 +120,21 @@
             <!--<img src="so.png" alt="so">-->
         </div>
     </div>
+    <div class="img-container" onclick="rotateAndReset()">
+        <!-- 这里可以添加其他内容，例如图片、文本等 -->
+    </div>
+
 
     <script>
+
+        function rotateAndReset() {
+            const overlayVideo = document.getElementById('overlayVideo');
+            overlayVideo.style.transform = 'rotate(90deg)'; // 小幅旋转
+            setTimeout(() => {
+                overlayVideo.style.transform = 'rotate(0)'; // 复位
+            }, 1000); // 500 毫秒后复位
+        }
+
         function resizeVideo(videoElement, containerElement) {
             const containerWidth = containerElement.offsetWidth;
             const containerHeight = containerElement.offsetHeight;
@@ -148,6 +163,10 @@
             resizeVideo(overlayVideo, container);
             resizeVideo(myVideo, container);
         });
+
+
+        // 定义点击事件处理函数
+
     </script>
     <!-- 其他页面内容 -->
 </body>
