@@ -13,16 +13,23 @@
             background-color: #b0c4de;
         }
 
-        #myVideo {
+
+        #myVideo,
+        #overlayVideo {
             position: fixed;
             right: 0;
             bottom: 0;
             min-width: 100%;
             min-height: 100%;
-            z-index: 0;
         }
 
+        #myVideo {
+            z-index: 0; /* 设置 background.mp4 的层级 */
+        }
 
+        #overlayVideo {
+            z-index: 1; /* 设置 ae.webm 的层级，高于 background.mp4 */
+        }
         .img-container {
             position: relative; /* 相对定位 */
             max-width: 50%;
@@ -95,6 +102,10 @@
 <body>
     <video autoplay muted loop id="myVideo">
         <source src="tu//background.mp4" type="video/mp4">
+
+    </video>
+
+    <video autoplay muted loop id="overlayVideo">
         <source src="tu//ae.webm" type="video/webm">
     </video>
 
@@ -108,29 +119,58 @@
         </div>
     </div>
 
+    <script>
+        function resizeVideo(videoElement, containerElement) {
+            const containerWidth = containerElement.offsetWidth;
+            const containerHeight = containerElement.offsetHeight;
+            const videoAspectRatio = videoElement.videoWidth / videoElement.videoHeight;
 
+            if (containerWidth / containerHeight > videoAspectRatio) {
+                // 窗口宽高比大于视频宽高比，调整视频宽度
+                videoElement.style.width = containerWidth + 'px';
+                videoElement.style.height = (containerWidth / videoAspectRatio) + 'px';
+            } else {
+                // 窗口宽高比小于等于视频宽高比，调整视频高度
+                videoElement.style.height = containerHeight + 'px';
+                videoElement.style.width = (containerHeight * videoAspectRatio) + 'px';
+            }
+        }
+
+        // 初始化视频尺寸
+        const overlayVideo = document.getElementById('overlayVideo');
+        const myVideo = document.getElementById('myVideo');
+        const container = document.querySelector('.img-container');
+        resizeVideo(overlayVideo, container);
+        resizeVideo(myVideo, container);
+
+        // 监听窗口大小变化，重新调整视频尺寸
+        window.addEventListener('resize', function () {
+            resizeVideo(overlayVideo, container);
+            resizeVideo(myVideo, container);
+        });
+    </script>
     <!-- 其他页面内容 -->
 </body>
 </html>
-<script>
-    window.addEventListener('resize', function() {
-        const video = document.getElementById('myVideo');
-        const container = document.querySelector('.img-container');
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-        const videoAspectRatio = video.videoWidth / video.videoHeight;
+<!--<script>
+    //window.addEventListener('resize', function() {
+    //    const video = document.getElementById('myVideo');
+    //    const container = document.querySelector('.img-container');
+    //    const containerWidth = container.offsetWidth;
+    //    const containerHeight = container.offsetHeight;
+    //    const videoAspectRatio = video.videoWidth / video.videoHeight;
 
-        if (containerWidth / containerHeight > videoAspectRatio) {
-            // 窗口宽高比大于视频宽高比，调整视频宽度
-            video.style.width = containerWidth + 'px';
-            video.style.height = (containerWidth / videoAspectRatio) + 'px';
-        } else {
-            // 窗口宽高比小于等于视频宽高比，调整视频高度
-            video.style.height = containerHeight + 'px';
-            video.style.width = (containerHeight * videoAspectRatio) + 'px';
-        }
-    });
+    //    if (containerWidth / containerHeight > videoAspectRatio) {
+    //        // 窗口宽高比大于视频宽高比，调整视频宽度
+    //        video.style.width = containerWidth + 'px';
+    //        video.style.height = (containerWidth / videoAspectRatio) + 'px';
+    //    } else {
+    //        // 窗口宽高比小于等于视频宽高比，调整视频高度
+    //        video.style.height = containerHeight + 'px';
+    //        video.style.width = (containerHeight * videoAspectRatio) + 'px';
+    //    }
+    //});
 
-    // 触发一次以初始化视频尺寸
-    window.dispatchEvent(new Event('resize'));
-</script>
+    //// 触发一次以初始化视频尺寸
+    //window.dispatchEvent(new Event('resize'));
+</script>-->
