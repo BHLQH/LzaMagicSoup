@@ -2,6 +2,7 @@
 <html>
 <head>
     <style>
+
         body {
             margin: 0;
             padding: 0;
@@ -11,6 +12,8 @@
             min-height: 100vh;
             background-color: #263e4d;
         }
+
+
         #myVideo,
         #overlayVideo {
             position: fixed;
@@ -26,6 +29,8 @@
 
         #overlayVideo {
             z-index: 1; /* 设置 ae.webm 的层级，高于 background.mp4 */
+      /*      transform-origin: 676px 1048px;*//*比例比坐标更可控，因为图片会拉伸*/
+            transform-origin: 60% 50%;
         }
         .img-container {
             position: relative; /* 相对定位 */
@@ -33,12 +38,22 @@
             max-height: 50%;
             overflow: hidden; /* 隐藏溢出部分 */
         }
+
             .img-container img {
                 width: 100%;
                 height: auto;
                 display: block;
                 margin: 0 auto;
             }
+
+
+        /*.icon {
+            position: absolute;*/ /* 绝对定位,.icon 的绝对定位是相对于[父元素] .img-container 的相对定位来计算的 */
+        /*top: 50%;*/ /* 图标垂直居中,当 .icon 元素的 top: 50%; 和 left: 50%; 设置为 50% 时，它会相对于 .img-container 的左上角进行定位。 */
+        /*left: 50%;*/ /* 图标水平居中 */
+        /*transform: translate(-50%, -50%);*/ /* 调整图标位置 */
+        /*}*/
+        /*.icon1,*/
         .icon2 {
             position: absolute; /* 绝对定位,.icon 的绝对定位是相对于[父元素] .img-container 的相对定位来计算的 */
             animation: shake 2s infinite alternate;
@@ -46,7 +61,7 @@
 
         .icon3,
         .icon1 {
-            width: 10px; /* 设置图标1的宽度,不设保持原尺寸 */
+            width: auto; /* 设置图标1的宽度,不设保持原尺寸 */
             height: auto; /* 高度自动调整，保持比例 */
             position: absolute; /* 绝对定位 */
             top: 20px; /* 设置图标1的垂直位置 */
@@ -56,10 +71,11 @@
         }
 
         .icon2 {
-            width: 40px; 
+            width: 40px; /* 设置图标2的宽度 */
             height: auto; /* 高度自动调整，保持比例 */
+            /*position: absolute;*/ /* 绝对定位 */
             top: 50px; /* 设置图标2的垂直位置 */
-            left: 20px; 
+            left: 20px; /* 设置图标2的水平位置 */
         }
 
         @keyframes shake {
@@ -83,6 +99,7 @@
                 transform: translateY(10px) rotate(1deg); /* 上下摇晃的范围 */
             }
         }
+
     </style>
 </head>
 <body>
@@ -95,7 +112,7 @@
         <source src="tu//ae.webm" type="video/webm">
     </video>
 
-    <div class="img-container">
+    <div class="img-container" onclick="rotateAndReset()">
         <img src="tu//uname.png" alt="uname">
         <div class="icon">
             <img class="icon1" src="tu//o_so.png" alt="so">
@@ -104,16 +121,18 @@
             <!--<img src="so.png" alt="so">-->
         </div>
     </div>
-    <div class="img-container" onclick="rotateAndReset()">
 
-    </div>
+
+
     <script>
 
+        // 定义点击事件处理函数
         function rotateAndReset() {
             const overlayVideo = document.getElementById('overlayVideo');
             overlayVideo.style.transform = 'rotate(90deg)'; // 小幅旋转
             setTimeout(() => {
                 overlayVideo.style.transform = 'rotate(0)'; // 复位
+                console.log('rotateAndReset() 被触发了！'); // 打印消息
             }, 1000); // 500 毫秒后复位
         }
 
@@ -132,18 +151,24 @@
                 videoElement.style.width = (containerHeight * videoAspectRatio) + 'px';
             }
         }
+
         // 初始化视频尺寸
         const overlayVideo = document.getElementById('overlayVideo');
         const myVideo = document.getElementById('myVideo');
+      //  const img = document.getElementById('.img-container img');无效
         const container = document.querySelector('.img-container');
         resizeVideo(overlayVideo, container);
         resizeVideo(myVideo, container);
+      //  resizeVideo(img, container);
 
         // 监听窗口大小变化，重新调整视频尺寸
         window.addEventListener('resize', function () {
             resizeVideo(overlayVideo, container);
             resizeVideo(myVideo, container);
+           // resizeVideo(img, container);
         });
+
+
 
     </script>
     <!-- 其他页面内容 -->
